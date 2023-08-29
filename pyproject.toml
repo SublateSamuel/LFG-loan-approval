@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "lfg-loan-approval"
+version = "0.1.0"
+description = ""
+authors = ["Samuel Sublate <samuelsublate.dev@gmail.com>"]
+readme = "README.md"
+packages = [{include = "lfg_loan_approval"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.12.0"
+blue = "^0.9.1"
+taskipy = "^1.12.0"
+pytest-django = "^4.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+lint = "blue --check --diff . && isort --check --diff ."
+test =  "pytest -s -x -vv"
+pipeline = "task lint && task test"
