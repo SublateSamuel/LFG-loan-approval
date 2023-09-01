@@ -1,0 +1,34 @@
+name: Pipeline Check Lint and Tests
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  pipeline-pybots:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the project repository
+        uses: actions/checkout@v3
+        with:
+          path: .
+      
+      - name: Switch to branch
+        run: git checkout ${GITHUB_REF#refs/pull/*/merge}
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          poetry install
+      
+      - name: Run style code analizer
+        run: poetry run task lint
+      
+      - name: Run tests
+        run: poetry run task test
